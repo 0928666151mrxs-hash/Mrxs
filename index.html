@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة حنكك - Hanakak</title>
+    <!-- خطوط عربية وعصرية -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Cairo', 'sans-serif'] },
+                    colors: {
+                        nile: { 600: '#0F4C81', 700: '#0a365c', 900: '#062038' },
+                        desert: { 500: '#D97706', 600: '#b45309' },
+                        terracotta: { 500: '#C2410C' },
+                        ivory: { 50: '#FAF8F5', 100: '#F8F5F0', 200: '#EFEAE1' },
+                        ink: '#1E242B',
+                        muted: '#5C6672'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Cairo', sans-serif; background-color: #FAF8F5; color: #1E242B; overflow-x: hidden; }
+        .nubian-pattern { background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg stroke='%230F4C81' stroke-opacity='0.045' stroke-width='1.2'%3E%3Cpath d='M30 0L60 30L30 60L0 30z'/%3E%3Cpath d='M30 12L48 30L30 48L12 30z'/%3E%3Ccircle cx='30' cy='30' r='3'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); }
+        .nubian-border-top { background-image: repeating-linear-gradient(90deg, #0F4C81 0px, #0F4C81 12px, #D97706 12px, #D97706 20px, #C2410C 20px, #C2410C 28px, #FAF8F5 28px, #FAF8F5 32px); height: 4px; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="antialiased nubian-pattern">
+
+    <!-- 1. شاشة البداية -->
+    <main id="splashScreen" class="flex flex-col items-center justify-between py-10 px-6 w-full min-h-screen bg-ivory-50 relative">
+        <div class="fixed top-0 inset-x-0 nubian-border-top"></div>
+        <div class="h-12"></div>
+        <div class="flex flex-col items-center justify-center my-auto w-full max-w-sm">
+            <div class="relative flex items-center justify-center w-28 h-28 bg-gradient-to-br from-nile-600 to-nile-900 rounded-full shadow-xl ring-4 ring-desert-500/30">
+                <svg class="w-14 h-14 text-white fill-current relative z-10" viewBox="0 0 100 100"><path d="M22 16C22 13.7909 23.7909 12 26 12H36C38.2091 12 40 13.7909 40 16V41H60V16C60 13.7909 61.7909 12 64 12H74C76.2091 12 78 13.7909 78 16V84C78 86.2091 76.2091 88 74 88H64C61.7909 88 60 86.2091 60 84V57H40V84C40 86.2091 38.2091 88 36 88H26C23.7909 88 22 86.2091 22 84V16Z"/></svg>
+            </div>
+            <div class="mt-4 text-center">
+                <h1 class="text-2xl font-black text-nile-600">حنكك</h1>
+                <p class="text-xs text-muted font-semibold mt-0.5">حلة واحدة.. ونسة ما بتخلص</p>
+            </div>
+            <div class="mt-8 w-full flex flex-col items-center">
+                <button type="button" id="btnEnterApp" class="w-full sm:w-64 py-3.5 px-6 bg-gradient-to-l from-nile-600 to-nile-700 text-white font-bold text-base rounded-full shadow-lg border border-desert-400/30 cursor-pointer">
+                    المتابعة إلى التطبيق ☕
+                </button>
+            </div>
+        </div>
+        <footer class="text-center pb-2 text-xs text-muted">صُنع بكل حب للسودان 🇸🇩</footer>
+    </main>
+
+    <!-- 2. شاشة تسجيل الدخول -->
+    <section id="loginScreen" class="hidden min-h-screen bg-ivory-100 nubian-pattern flex flex-col items-center justify-center p-4 relative">
+        <div class="fixed top-0 inset-x-0 nubian-border-top"></div>
+        <div class="w-full max-w-md bg-white rounded-3xl shadow-xl overflow-hidden border border-ivory-200 p-6 sm:p-8">
+            <div class="text-center mb-5">
+                <h1 class="text-2xl font-extrabold text-nile-600">حبابك عشرة في حنكك 🇸🇩</h1>
+                <p class="text-sm text-muted mt-1">سجل دخولك أو أنشئ حساباً جديداً</p>
+            </div>
+
+            <!-- نموذج تسجيل الدخول -->
+            <form id="loginForm" class="space-y-4">
+                <input type="email" id="loginEmail" required placeholder="البريد الإلكتروني" class="w-full px-4 py-3.5 rounded-2xl bg-ivory-50 border border-ivory-200 outline-none text-sm">
+                <input type="password" id="loginPassword" required placeholder="كلمة المرور" class="w-full px-4 py-3.5 rounded-2xl bg-ivory-50 border border-ivory-200 outline-none text-sm">
+                <button type="submit" id="loginSubmitBtn" class="w-full py-3.5 bg-nile-600 text-white font-bold rounded-2xl shadow-md cursor-pointer">تسجيل الدخول</button>
+            </form>
+
+            <!-- نموذج إنشاء حساب -->
+            <form id="registerForm" class="hidden space-y-3.5">
+                <input type="text" id="regFullName" required placeholder="الاسم الكامل (مثال: طارق ود النيل)" class="w-full px-4 py-3 rounded-2xl bg-ivory-50 border border-ivory-200 outline-none text-sm">
+                <input type="email" id="regEmail" required placeholder="البريد الإلكتروني" class="w-full px-4 py-3 rounded-2xl bg-ivory-50 border border-ivory-200 outline-none text-sm">
+                <input type="password" id="regPassword" required placeholder="كلمة المرور (6 أحرف أو أكثر)" class="w-full px-4 py-3 rounded-2xl bg-ivory-50 border border-ivory-200 outline-none text-sm">
+                <button type="submit" id="regSubmitBtn" class="w-full py-3.5 bg-terracotta-500 text-white font-bold rounded-2xl shadow-sm cursor-pointer">إنشاء حساب حقيقي</button>
+                <button type="button" id="btnBackToLogin" class="w-full text-xs text-nile-600 font-bold pt-1 cursor-pointer">عندك حساب؟ تسجيل الدخول</button>
+            </form>
+
+            <div class="mt-4 flex flex-col gap-2.5">
+                <button type="button" id="btnShowRegister" class="w-full py-3 bg-terracotta-500 text-white font-bold rounded-2xl text-sm cursor-pointer">إنشاء حساب جديد</button>
+                <button type="button" id="btnBackToSplash" class="w-full py-2 text-muted text-xs font-semibold cursor-pointer">← الرجوع</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. واجهة التطبيق الرئيسية -->
+    <div id="mainAppScreen" class="hidden bg-ivory-100 nubian-pattern min-h-screen pb-16">
+        <div class="fixed top-0 inset-x-0 nubian-border-top z-50"></div>
+
+        <header class="sticky top-2 z-40 max-w-[1440px] mx-auto px-4 pt-1">
+            <div class="bg-white/90 backdrop-blur-md shadow-md border border-ivory-200 rounded-3xl h-16 px-5 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-nile-600 to-nile-900 flex items-center justify-center text-white font-black">H</div>
+                    <span class="text-xl font-black text-nile-600">حنكك</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span id="headerUserName" class="font-bold text-xs text-ink">طارق</span>
+                    <button type="button" id="btnLogout" class="px-3 py-1.5 bg-terracotta-50 text-terracotta-600 text-xs font-bold rounded-xl cursor-pointer">خروج</button>
+                </div>
+            </div>
+        </header>
+
+        <main class="max-w-[1440px] mx-auto px-4 pt-5 flex justify-between gap-5">
+            <div class="flex-1 max-w-[660px] mx-auto w-full space-y-5">
+                <!-- صندوق النشر -->
+                <section class="bg-white rounded-3xl shadow-sm border border-ivory-200 overflow-hidden">
+                    <div class="nubian-border-top"></div>
+                    <div class="p-4 space-y-3">
+                        <textarea id="postInput" rows="2" placeholder="بشنو بتفكر الليلة؟ ارمي حنكك هنا..." class="w-full bg-ivory-50 border border-ivory-200 rounded-2xl p-3 text-sm outline-none resize-none"></textarea>
+                        <div class="flex justify-end">
+                            <button type="button" id="publishPostBtn" class="bg-nile-600 hover:bg-nile-700 text-white font-bold px-5 py-2.5 rounded-2xl text-xs sm:text-sm shadow-md transition cursor-pointer">انشر الحنك في السحابة ☁️</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- خلاصة المنشورات -->
+                <section id="newsFeed" class="space-y-4">
+                    <p class="text-center text-muted py-6">جاري جلب الحناكيش من قاعدة البيانات... ☁️</p>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- سكربت الواجهة الأساسي -->
+    <script>
+        document.getElementById('btnEnterApp').addEventListener('click', () => {
+            document.getElementById('splashScreen').classList.add('hidden');
+            document.getElementById('loginScreen').classList.remove('hidden');
+        });
+        document.getElementById('btnBackToSplash').addEventListener('click', () => {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('splashScreen').classList.remove('hidden');
+        });
+        document.getElementById('btnShowRegister').addEventListener('click', () => {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('btnShowRegister').classList.add('hidden');
+            document.getElementById('registerForm').classList.remove('hidden');
+        });
+        document.getElementById('btnBackToLogin').addEventListener('click', () => {
+            document.getElementById('registerForm').classList.add('hidden');
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('btnShowRegister').classList.remove('hidden');
+        });
+        function showToast(msg) {
+            const c = document.getElementById('toastContainer');
+            const t = document.createElement('div');
+            t.className = 'bg-nile-900 text-white text-xs font-bold px-4 py-3 rounded-2xl shadow-xl border border-desert-500/40';
+            t.textContent = msg;
+            c.appendChild(t);
+            setTimeout(() => t.remove(), 3000);
+        }
+    </script>
+
+    <!-- سكربت Firebase الحقيقي الآمن والمصحح -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDAH_ZVWIugP5j-TigMV8N-_rnayzdq2XQ",
+            authDomain: "hanakakapp.firebaseapp.com",
+            projectId: "hanakakapp",
+            storageBucket: "hanakakapp.firebasestorage.app",
+            messagingSenderId: "1071372681021",
+            appId: "1:1071372681021:web:0cf52edf64e7784a174f54"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUser = { name: "زول سمح", email: "" };
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser.name = user.displayName || user.email.split('@')[0];
+                currentUser.email = user.email;
+
+                document.getElementById('headerUserName').textContent = currentUser.name;
+                document.getElementById('splashScreen').classList.add('hidden');
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('mainAppScreen').classList.remove('hidden');
+
+                loadFirestorePosts();
+            }
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try {
+                await signInWithEmailAndPassword(auth, document.getElementById('loginEmail').value, document.getElementById('loginPassword').value);
+                showToast("حبابك عشرة في حنكك! ☕");
+            } catch (err) { alert("خطأ في تسجيل الدخول: " + err.message); }
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try {
+                const cred = await createUserWithEmailAndPassword(auth, document.getElementById('regEmail').value, document.getElementById('regPassword').value);
+                await updateProfile(cred.user, { displayName: document.getElementById('regFullName').value });
+                showToast("تم إنشاء الحساب بنجاح 🇸🇩");
+            } catch (err) { alert("خطأ في التسجيل: " + err.message); }
+        });
+
+        document.getElementById('btnLogout').addEventListener('click', async () => {
+            await signOut(auth);
+            document.getElementById('mainAppScreen').classList.add('hidden');
+            document.getElementById('loginScreen').classList.remove('hidden');
+            showToast("في أمان الله 👋");
+        });
+
+        document.getElementById('publishPostBtn').addEventListener('click', async () => {
+            const input = document.getElementById('postInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            try {
+                await addDoc(collection(db, "posts"), {
+                    author: currentUser.name,
+                    content: text,
+                    timestamp: Date.now(),
+                    timeLabel: "الآن"
+                });
+                input.value = "";
+                showToast("تم نشر الحنك في السحابة بنجاح 🔥");
+                loadFirestorePosts();
+            } catch (err) { alert("خطأ في النشر: " + err.message); }
+        });
+
+        async function loadFirestorePosts() {
+            const feed = document.getElementById('newsFeed');
+            try {
+                const snap = await getDocs(collection(db, "posts"));
+                const posts = [];
+                snap.forEach(doc => posts.push({ id: doc.id, ...doc.data() }));
+                posts.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+                if (posts.length === 0) {
+                    feed.innerHTML = `<div class="bg-white rounded-3xl p-8 text-center"><p class="text-sm font-bold text-muted">الديوان لسه هادي.. اكتب أول حنك! ☕</p></div>`;
+                    return;
+                }
+
+                feed.innerHTML = posts.map(p => `
+                    <article class="bg-white rounded-3xl shadow-sm border border-ivory-200 overflow-hidden">
+                        <div class="nubian-border-top opacity-75"></div>
+                        <div class="p-4">
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="w-10 h-10 rounded-2xl bg-nile-600 text-white font-black flex items-center justify-center">
+                                    ${(p.author || 'ز')[0]}
+                                </div>
+                                <div>
+                                    <h4 class="font-extrabold text-sm text-ink">${p.author || 'زول سمح'}</h4>
+                                    <span class="text-[11px] text-muted">${p.timeLabel || 'الآن'} • السودان 🇸🇩</span>
+                                </div>
+                            </div>
+                            <p class="text-sm text-ink font-medium mt-2">${p.content}</p>
+                        </div>
+                    </article>
+                `).join('');
+            } catch (err) {
+                feed.innerHTML = `<p class="text-center text-red-500 text-xs">تعذر جلب المنشورات من قاعدة البيانات.</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
